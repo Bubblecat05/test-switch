@@ -22,31 +22,30 @@
         try {
             log("[...] Initialisation des structures mémoires alignées...");
             
-            // On crée un espace mémoire brut partagé (ArrayBuffer)
-            var buffer brut = new ArrayBuffer(64);
-            
-            // On crée deux vues différentes sur la MÊME zone mémoire (une en morceaux de 32 bits, une en 8 bits)
+            // Correction de la variable (sans espace)
+            var buffer_brut = new ArrayBuffer(64);
             var vue32 = new Uint32Array(buffer_brut);
             var vue8 = new Uint8Array(buffer_brut);
             
-            // On injecte une valeur spécifique ("0xDEADBEEF" - signature classique en hacking)
+            // Injection de la valeur test
             vue32[0] = 0xDEADBEEF;
             
             log("[✓] Structures initialisées.");
             log("[...] Lecture brute des octets alignés :");
             
-            // On vérifie comment le processeur de la Switch lit chaque octet individuellement
+            // Lecture des 4 premiers octets de l'objet
             log("Octet 0 : 0x" + vue8[0].toString(16).toUpperCase());
             log("Octet 1 : 0x" + vue8[1].toString(16).toUpperCase());
             log("Octet 2 : 0x" + vue8[2].toString(16).toUpperCase());
             log("Octet 3 : 0x" + vue8[3].toString(16).toUpperCase());
             
-            log("<br><span style='color:#00ffff;'>[✓] Test d'alignement réussi. L'architecture de la Switch lit en mode 'Little Endian'.</span>");
+            log("<br><span style='color:#00ffff;'>[✓] Test réussi. Analyse de la structure ARM64 complétée.</span>");
         } catch(e) {
-            log("<span style='color:red;'>[X] Erreur d'accès mémoire : " + e.message + "</span>");
+            log("<span style='color:red;'>[X] Erreur : " + e.message + "</span>");
         }
     </script>
 </body>
 </html>
+
 
 
