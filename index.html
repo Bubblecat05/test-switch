@@ -1,44 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Labo Étape 5 : Test de Surcharge</title>
-    <style>
-        body { background: #111; color: #ff0000; font-family: monospace; padding: 20px; font-size: 16px; }
-        h1 { color: #fff; border-bottom: 1px solid #ff0000; padding-bottom: 10px; }
-    </style>
-</head>
-<body>
-    <h1>[+] Labo Étape 5 : Test de Surcharge de la Pile</h1>
-    <p>Tentative de dépassement de capacité de la pile d'exécution...</p>
-    <hr>
-    <div id="console" style="color: #0f0;"></div>
-
-    <script>
+<script>
         function log(msg) {
             document.getElementById('console').innerHTML += msg + "<br>";
         }
 
-        let prof = 0;
+        let memoryLeak = [];
 
-        function crashTest() {
-            prof++;
-            if (prof % 100000 === 0) {
-                log("[.] Profondeur de la pile : " + prof);
-            }
-            crashTest();
+        function oomTest() {
+            // On crée un énorme tableau à chaque tour sans jamais le vider
+            memoryLeak.push(new Array(10000000).fill(1.23));
+            log("[.] Blocs mémoire alloués : " + memoryLeak.length);
+            
+            // On relance immédiatement
+            setTimeout(oomTest, 1);
         }
 
         try {
-            log("[+] Lancement du test récursif...");
-            crashTest();
+            log("[+] Lancement du test de saturation RAM...");
+            oomTest();
         } catch (e) {
-            log("<br><span style='color:#ff0000;'>[!] Protection active : Le navigateur a stoppé la pile.</span>");
-            log("Message du système : " + e.message);
+            log("<br><span style='color:#ff0000;'>[!] Erreur mémoire :</span> " + e.message);
         }
     </script>
-</body>
-</html>
 
 
 
