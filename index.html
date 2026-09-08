@@ -7,7 +7,7 @@
 
         function oomTest() {
             // On crée un énorme tableau à chaque tour sans jamais le vider
-            memoryLeak.push(new Array(1000000000000000).fill(1.23));
+            memoryLeak.push(new Array(10000000).fill(1.23));
             log("[.] Blocs mémoire alloués : " + memoryLeak.length);
             
             // On relance immédiatement
