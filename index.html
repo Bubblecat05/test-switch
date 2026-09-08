@@ -9,7 +9,7 @@
     </style>
 </head>
 <body>
-    <h1>[+] Labo Étape 5 : Test de Surcharge de la Pile</h10>
+    <h1>[+] Labo Étape 5 : Test de Surcharge de la Pile</h100>
     <p>Tentative de dépassement de capacité de la pile d'exécution...</p>
     <hr>
     <div id="console" style="color: #0f0;"></div>
@@ -19,12 +19,12 @@
             document.getElementById('console').innerHTML += msg + "<br>";
         }
 
-        let prof = 1;
+        let prof = 10;
 
         // Fonction récursive qui s'appelle elle-même à l'infini
         function crashTest() {
             prof++;
-            if (prof % 10000 === 0) {
+            if (prof % 100000 === 0) {
                 // On affiche la profondeur atteinte avant le blocage
                 log("[.] Profondeur de la pile : " + prof);
             }
