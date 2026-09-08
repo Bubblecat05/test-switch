@@ -2,15 +2,15 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Labo Kernel OLED</title>
+    <title>Labo Étape 2 : Stress Test</title>
     <style>
         body { background: #111; color: #0f0; font-family: monospace; padding: 20px; font-size: 16px; }
-        h1 { color: #fff; border-bottom: 1px solid #0f0; padding-bottom: 10px; }
+        h1 { color: #fff; border-bottom: 1px solid #ff00ff; padding-bottom: 10px; }
     </style>
 </head>
 <body>
-    <h1>[+] Connexion au Labo Réussie !</h1>
-    <p>Statut : Script en cours d'exécution sur le processeur de la Switch...</p>
+    <h1>[+] Labo Étape 2 : Analyse de Stabilité</h1>
+    <p>Tentative de surcharge contrôlée des objets graphiques...</p>
     <hr>
     <div id="console"></div>
 
@@ -20,17 +20,23 @@
         }
 
         try {
-            log("<b>[✓] Navigateur détecté :</b> " + navigator.userAgent);
-            log("<b>[✓] Plateforme matérielle :</b> " + navigator.platform);
-            log("<b>[...] Tentative d'allocation mémoire basique...</b>");
+            log("[...] Initialisation de la boucle de stress...");
             
-            // Test d'allocation de mémoire pour observer le comportement du WebKit
-            var buffer = new ArrayBuffer(1024 * 1024 * 4); // 4 Mo
-            log("<b>[✓] Allocation réussie (4 Mo réservés).</b>");
-            log("<br><span style='color:#00ffff;'>[!] Prêt pour l'étape suivante.</span>");
+            // On va créer des milliers de petits tableaux pour forcer le ramasse-miettes (Garbage Collector) du WebKit à travailler dur
+            let stockage = [];
+            for (let i = 0; i < 20000; i++) {
+                stockage.push(new Uint32Array(32));
+                if (i % 5000 === 0) {
+                    log("[.] Objets créés : " + i);
+                }
+            }
+            
+            log("<br><span style='color:#ff00ff;'>[✓] Boucle terminée. Le WebKit OLED a résisté à la charge basique.</span>");
+            log("[!] Aucun crash détecté. La mémoire est stable.");
         } catch(e) {
-            log("<span style='color:red;'>[X] Erreur détectée : " + e.message + "</span>");
+            log("<span style='color:red;'>[X] Erreur ou instabilité détectée : " + e.message + "</span>");
         }
     </script>
 </body>
 </html>
+
