@@ -2,42 +2,47 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Labo Étape 4 : Cartographie du Système</title>
+    <title>Labo Étape 5 : Stack Surcharge</title>
     <style>
-        body { background: #111; color: #0f0; font-family: monospace; padding: 20px; font-size: 16px; }
-        h1 { color: #fff; border-bottom: 1px solid #00ff00; padding-bottom: 10px; }
+        body { background: #111; color: #ff0000; font-family: monospace; padding: 20px; font-size: 16px; }
+        h1 { color: #fff; border-bottom: 1px solid #ff0000; padding-bottom: 10px; }
     </style>
 </head>
 <body>
-    <h1>[+] Labo Étape 4 : Cartographie de l'environnement</h1>
-    <p>Extraction des capacités et des objets système disponibles...</p>
+    <h1>[+] Labo Étape 5 : Test de Surcharge de la Pile</h1>
+    <p>Tentative de dépassement de capacité de la pile d'exécution...</p>
     <hr>
-    <div id="console"></div>
+    <div id="console" style="color: #0f0;"></div>
 
     <script>
         function log(msg) {
             document.getElementById('console').innerHTML += msg + "<br>";
         }
 
+        let prof = 0;
+
+        // Fonction récursive qui s'appelle elle-même à l'infini
+        function crashTest() {
+            prof++;
+            if (prof % 1000 === 0) {
+                // On affiche la profondeur atteinte avant le blocage
+                log("[.] Profondeur de la pile : " + prof);
+            }
+            crashTest(); // Appel récursif
+        }
+
         try {
-            log("[...] Analyse des fonctionnalités globales...");
-            
-            // Vérification de fonctionnalités souvent ciblées par les exploits
-            log("Conteneur Math.gc (Garbage Collector) : " + (typeof Math.gc !== 'undefined' ? "Présent" : "Absent / Masqué"));
-            log("Support des WebAssembly (Wasm) : " + (typeof WebAssembly !== 'undefined' ? "Disponible" : "Bloqué"));
-            log("Support des SharedArrayBuffer : " + (typeof SharedArrayBuffer !== 'undefined' ? "Disponible" : "Désactivé"));
-            
-            log("<br>[...] Analyse des objets matériels accessibles :");
-            log("Nombre de cœurs processeur visibles : " + (navigator.hardwareConcurrency || "Masqué"));
-            log("Résolution d'écran logique : " + window.innerWidth + "x" + window.innerHeight);
-            
-            log("<br><span style='color:#00ffff;'>[✓] Cartographie terminée. Données d'environnement prêtes.</span>");
+            log("[...] Lancement du test récursif...");
+            crashTest();
         } catch(e) {
-            log("<span style='color:red;'>[X] Erreur d'inspection : " + e.message + "</span>");
+            // Si le navigateur attrape l'erreur proprement
+            log("<br><span style='color:#ffff00;'>[!] Protection active : Le navigateur a stoppé la pile.</span>");
+            log("Message du système : " + e.message);
         }
     </script>
 </body>
 </html>
+
 
 
 
