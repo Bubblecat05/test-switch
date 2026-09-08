@@ -1,20 +1,26 @@
-let prof = 0;
-
-// Fonction récursive
-function crashTest() {
-    prof++;
-    if (prof % 100000 === 0) {
-        log("[.] Profondeur de la pile : " + prof);
+<script>
+    function log(msg) {
+        document.getElementById('console').innerHTML += msg + "<br>";
     }
-    crashTest();
-}
 
-try {
-    log("[+] Lancement du test récursif...");
-    crashTest();
-} catch (e) {
-    log("<br><span style='color:#ff0000;'>[!] Protection active : Le navigateur a stoppé la pile.</span>");
-    log("Message du système : " + e.message);
+    let prof = 0;
+
+    function crashTest() {
+        prof++;
+        if (prof % 100000 === 0) {
+            log("[.] Profondeur de la pile : " + prof);
+        }
+        crashTest();
+    }
+
+    try {
+        log("[+] Lancement du test récursif...");
+        crashTest();
+    } catch (e) {
+        log("<br><span style='color:#ff0000;'>[!] Protection active : Le navigateur a stoppé la pile.</span>");
+        log("Message du système : " + e.message);
+    }
+</script>
 }
 
 
